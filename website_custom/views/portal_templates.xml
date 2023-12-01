@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <template id="portal_my_home" inherit_id="portal.portal_my_home">
+        <!-- Página principal del home del portal Se basa en una plantilla existente llamada portal_layout,
+        configura una variable llamada my_details, y estructura la página con contenedores y elementos para mostrar
+        información, como documentos.-->
+
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+
+            <t t-call="portal.portal_docs_entry">
+                <!-- Esta plantilla se utiliza para generar entradas de documentos en el portal.
+                Cada entrada es un enlace (<a>) que puede tener un título, un enlace dinámico (url), y opcionalmente,
+                un contador de documentos (count) o un marcador de posición (placeholder_count) -->
+
+                <t t-set="url">/users</t>
+                <t t-set="title">Usuarios</t>
+                <t t-set="placeholder_count" t-value="'users_quantity'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_breadcrumbs" inherit_id="portal.portal_breadcrumbs">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'users_list_view'" class="breadcrumb-item">Usuarios</li>
+            <li t-if="page_name == 'users_form_view'" class="breadcrumb-item">
+                <a href="/users">Usuarios</a>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="users_list_view">
+        <t t-call="portal.portal_layout">
+            <t t-call="portal.portal_table">
+                <thead>
+                    <tr class="text-center">
+                        <th>ID</th>
+                        <th>LOGIN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="users" t-as="user">
+                        <tr class="text-center">
+                            <td>
+                                <t t-out="user.id"/>
+                            </td>
+                            <td>
+                                <a t-attf-href="/users/#{user.id}">
+                                    <t t-out="user.login"/>
+                                </a>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </t>
+        </t>
+    </template>
+
+    <template id="users_form_view" inherit_id="portal.portal_sidebar">
+        <xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
+            <t t-if="page_name == 'users_form_view'">
+                <section style="background-color: #eee;">
+                    <div class="container py-5">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="card mb-4">
+                                    <div class="card-body text-center">
+                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                                             alt="avatar"
+                                             class="rounded-circle img-fluid" style="width: 150px;"/>
+                                        <h5 class="my-3"><t t-out="user.partner_id.name"/></h5>
+                                        <p class="text-muted mb-1">Full Stack Developer</p>
+                                        <p class="text-muted mb-4">Bay Area, San Francisco, CA</p>
+                                        <div class="d-flex justify-content-center mb-2">
+                                            <button type="button" class="btn btn-primary">Follow</button>
+                                            <button type="button" class="btn btn-outline-primary ms-1">Message</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <p class="mb-0">Name</p>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <p class="text-muted mb-0"><t t-out="user.partner_id.name"/></p>
+                                            </div>
+                                        </div>
+                                        <hr/>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <p class="mb-0">Email</p>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <p class="text-muted mb-0"><t t-out="user.login"/></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </t>
+        </xpath>
+    </template>
+</odoo>
