@@ -31,6 +31,13 @@
 
     <template id="users_list_view">
         <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+            <!-- Esta plantilla define una barra de búsqueda interactiva para un portal en Odoo.
+            La barra de búsqueda incluye opciones para ordenar, filtrar y agrupar elementos, junto con la capacidad de
+            realizar búsquedas personalizadas. -->
+                <t t-set="title">Usuarios</t>
+            </t>
             <t t-call="portal.portal_table">
                 <thead>
                     <tr class="text-center">

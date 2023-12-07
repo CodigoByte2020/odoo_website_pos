@@ -26,17 +26,44 @@ class AppWebCustomerPortal(CustomerPortal):
     # El parámetro page de la función almacena el argumento page de la ruta, sino definimos este parámetro,
     # el argumento de la ruta se guarda en **kwargs.
     # El argumento de la ruta y el parámetro de la función deben tener el mismo nombre.
-    def users_list_view(self, page=1, **kwargs):
+    def users_list_view(self, page=1, sortby=None, search=None, search_in='all', **kwargs):
         print('HERE')
         step = 3
         model_res_users = request.env['res.users']
         user_quantity = model_res_users.search_count([])
-        page_detail = pager(url='/users', total=user_quantity, page=page, step=step)
-        users = model_res_users.search([], limit=step, offset=page_detail['offset'])
+        searchbar_sortings = {
+            'id': {'label': 'ID', 'order': 'id asc'},
+            'login': {'label': 'LOGIN', 'order': 'login'}
+        }
+        # search = sobre que campo que queremos buscar
+        # search_in =  que filtro de busqueda se esta usando
+        searchbar_inputs = {
+            'all': {'label': 'Todos', 'input': 'all', 'domain': []},
+            'id': {'label': 'Por ID', 'input': 'id', 'domain': [('id', 'ilike', search)]},
+            'login': {'label': 'Por login', 'input': 'login', 'domain': [('login', 'ilike', search)]}
+        }
+        searchbar_domain = searchbar_inputs[search_in]['domain']
+
+        if not sortby:
+            sortby = 'id'
+        order = searchbar_sortings[sortby]['order']
+        page_detail = pager(
+            url='/users',
+            total=user_quantity,
+            page=page,
+            step=step,
+            url_args={'sortby': sortby, 'search_in': search_in, 'search': search}
+        )
+        users = model_res_users.search(searchbar_domain, order=order, limit=step, offset=page_detail['offset'])
         values = {
             'users': users,
             'page_name': 'users_list_view',
-            'pager': page_detail
+            'pager': page_detail,
+            'sortby': sortby,
+            'searchbar_sortings': searchbar_sortings,
+            'searchbar_inputs': searchbar_inputs,
+            'search': search,
+            'search_in': search_in
         }
         return request.render('website_custom.users_list_view', values)
 
