@@ -42,6 +42,7 @@
                 <thead>
                     <tr class="text-center">
                         <th>ID</th>
+                        <th>PHOTO</th>
                         <th>LOGIN</th>
                     </tr>
                 </thead>
@@ -50,6 +51,17 @@
                         <tr class="text-center">
                             <td>
                                 <t t-out="user.id"/>
+                            </td>
+                            <td>
+                                <t t-if="user.image_1920">
+                                    <!-- Asigna dinámicamente la fuente de una imagen en formato base64. -->
+                                    <img t-attf-src="data:image/png;base64,{{user.image_1920}}" alt="avatar"
+                                         class="rounded-circle img-fluid" style="width: 50px;"/>
+                                </t>
+                                <t t-else="">
+                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                                         alt="avatar" class="rounded-circle img-fluid" style="width: 50px;"/>
+                                </t>
                             </td>
                             <td>
                                 <a t-attf-href="/users/#{user.id}">
@@ -72,9 +84,15 @@
                             <div class="col-lg-4">
                                 <div class="card mb-4">
                                     <div class="card-body text-center">
-                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
-                                             alt="avatar"
-                                             class="rounded-circle img-fluid" style="width: 150px;"/>
+                                        <t t-if="user.image_1920">
+                                            <!-- Asigna dinámicamente la fuente de una imagen en formato base64. -->
+                                            <img t-attf-src="data:image/png;base64,{{user.image_1920}}" alt="avatar"
+                                                 class="rounded-circle img-fluid" style="width: 150px;"/>
+                                        </t>
+                                        <t t-else="">
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                                                 alt="avatar" class="rounded-circle img-fluid" style="width: 150px;"/>
+                                        </t>
                                         <h5 class="my-3"><t t-out="user.partner_id.name"/></h5>
                                         <p class="text-muted mb-1">Full Stack Developer</p>
                                         <p class="text-muted mb-4">Bay Area, San Francisco, CA</p>
