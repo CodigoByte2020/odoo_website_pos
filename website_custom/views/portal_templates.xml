@@ -132,4 +132,30 @@
             </t>
         </xpath>
     </template>
+
+    <template id="prueba_template">
+        <t t-call="website.layout">
+            <div class="container">
+                <h1>Plantilla de prueba</h1>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>LOGIN</th>
+                            <th>STATE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="users" t-as="user">
+                            <tr>
+                                <td><t t-out="user.id"/></td>
+                                <td><t t-out="user.login"/></td>
+                                <td><t t-out="user.active"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
 </odoo>

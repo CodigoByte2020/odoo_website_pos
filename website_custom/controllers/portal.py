@@ -1,4 +1,4 @@
-from odoo.addons.portal.controllers.portal import CustomerPortal, pager, get_records_pager
+from odoo.addons.portal.controllers.portal import CustomerPortal, pager
 from odoo.http import request
 
 from odoo import http
@@ -68,7 +68,7 @@ class AppWebCustomerPortal(CustomerPortal):
         return request.render('website_custom.users_list_view', values)
 
     # @http.route(['/users/<int:user_id>'], type='http', website=True)
-    @http.route(['/users/<model("res.users"):user>'], type='http', website=True)
+    @http.route('/users/<model("res.users"):user>', type='http', website=True)
     def users_form_view(self, user, **kwargs):
         # user = request.env['res.users'].sudo().browse(user_id) Si recibimos <int:user_id> debemos buscar el usuario.
         user_ids = request.env['res.users'].search([]).ids
@@ -81,3 +81,9 @@ class AppWebCustomerPortal(CustomerPortal):
             'next_record': user_index < len(user_ids) - 1 and f'/users/{user_ids[user_index + 1]}'
         }
         return request.render('website_custom.users_form_view', values)
+
+    @http.route(['/users/all', '/users/list/<user_ids>'], type='http', website=True, auth='public')
+    def users_prueba(self, **kwargs):
+        # return '''<h1>Plantilla de prueba</h1>'''
+        users = request.env['res.users'].sudo().search([])
+        return request.render('website_custom.prueba_template', {'users': users})
